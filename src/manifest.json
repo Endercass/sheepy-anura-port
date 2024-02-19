@@ -1,0 +1,12 @@
+{
+  "name": "Sheepy: A Short Adventure",
+  "type": "auto",
+  "package": "com.mrsuicidesheep.sheepy",
+  "index": "index.html",
+  "icon": "icons/icon-128.png",
+  "wininfo": {
+    "title": "Sheepy: A Short Adventure",
+    "width": "800px",
+    "height": "600px"
+  }
+}

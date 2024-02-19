@@ -54,21 +54,16 @@
       }
     </style>
     <link rel="stylesheet" href="achievements.css" />
+    <script src="achievements.js"></script>
+    <script type="module" src="anura_integration.mjs"></script>
   </head>
   <body>
     <h1>Sheepy: A Short Adventure - Unofficial Web Port</h1>
 
-    <a href="https://mrsuicidesheep.itch.io/sheepy">
-      <img
-        src="https://img.itch.zone/aW1nLzE0ODcxMzAwLmpwZw==/original/TNb8k6.jpg"
-      />
+    <a id="banner_anchor">
+      <img id="banner" />
     </a>
-    <a
-      id="launch_button"
-      href="javascript:window.open('/play.html', null, 'height=720,width=1280'); undefined;"
-    >
-      Launch Game
-    </a>
+    <a id="launch_button" href="javascript:launchGame()"> Launch Game </a>
 
     <h2 style="margin-bottom: 4px">Achievements:</h2>
     <div id="achievements_container">
@@ -77,7 +72,6 @@
       <h3 id="locked_header">Locked:</h3>
       <div id="locked_grid" class="achievements_grid"></div>
     </div>
-    <script src="achievements.js" defer onload="index_load()"></script>
 
     <h2>Disclaimer:</h2>
     <div id="disclaimer_container">

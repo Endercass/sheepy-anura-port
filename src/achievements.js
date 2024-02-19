@@ -265,23 +265,29 @@ const achievements = {
   },
 };
 
+window.anura ||= window.top.anura;
+
 const cached_imgs = {};
 const channel = new BroadcastChannel("achievements");
 var achievement_status = {};
 
-function load_achievements() {
-  if (!localStorage.getItem("achievements")) {
-    for (let achievement_name in achievements) {
-      achievement_status[achievement_name] = false;
+function load_achievements(callback) {
+  settings.get("achievements").then((achievements) => {
+    if (!achievements) {
+      for (let achievement_name in achievements) {
+        achievement_status[achievement_name] = false;
+      }
+      save_achievements();
+      callback && callback();
+    } else {
+      achievement_status = achievements;
+      callback && callback();
     }
-    save_achievements();
-  } else {
-    achievement_status = JSON.parse(localStorage.getItem("achievements"));
-  }
+  });
 }
 
 function save_achievements() {
-  localStorage.setItem("achievements", JSON.stringify(achievement_status));
+  settings.set("achievements", achievement_status);
 }
 
 function activate_achievement(name) {
@@ -326,8 +332,23 @@ function achievement_div(achievement) {
   let img = document.createElement("img");
   img.className = "achievement_img";
 
-  if (achievement_status[name]) img.src = achievement.icon;
-  else img.src = achievement.icongray;
+  // if (achievement_status[name]) img.src = achievement.icon;
+  // else img.src = achievement.icongray;
+  if (achievement_status[name]) {
+    anura.net
+      .fetch(achievement.icon)
+      .then((response) => response.blob())
+      .then((blob) => {
+        img.src = URL.createObjectURL(blob);
+      });
+  } else {
+    anura.net
+      .fetch(achievement.icongray)
+      .then((response) => response.blob())
+      .then((blob) => {
+        img.src = URL.createObjectURL(blob);
+      });
+  }
 
   let text_div = document.createElement("div");
   text_div.className = "achievement_text";
@@ -395,21 +416,24 @@ function populate_achievements() {
 function preload_images() {
   for (let [name, achievement] of Object.entries(achievements)) {
     let img = new Image();
-    img.src = achievement.icon;
+    img.src = window.baseurl + "/hidden.png";
     cached_imgs[name] = img;
+    anura.net
+      .fetch(achievement.icon)
+      .then((response) => response.blob())
+      .then((blob) => {
+        img.src = URL.createObjectURL(blob);
+      });
   }
 }
 
 function index_load() {
   populate_achievements();
   channel.onmessage = () => {
-    load_achievements();
-    populate_achievements();
+    load_achievements(populate_achievements);
   };
 }
 
 //disable back/forward cache to reduce memory usage
 window.addEventListener("unload", function () {});
 window.addEventListener("beforeunload", function () {});
-
-load_achievements();
