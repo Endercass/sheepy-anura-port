@@ -50,7 +50,7 @@ window.nw = {
       };
     },
   },
-  
+
   Clipboard: {
     get() {
       return {
@@ -64,6 +64,6 @@ window.nw = {
   Shell: {
     openExternal(url) {
       window.open(url);
-    }
-  }
+    },
+  },
 };

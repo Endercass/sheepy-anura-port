@@ -275,8 +275,7 @@ function load_achievements() {
       achievement_status[achievement_name] = false;
     }
     save_achievements();
-  }
-  else {
+  } else {
     achievement_status = JSON.parse(localStorage.getItem("achievements"));
   }
 }
@@ -314,7 +313,7 @@ function activate_achievement(name) {
   document.body.append(notification);
   setTimeout(() => {
     notification.remove();
-  }, 6000)
+  }, 6000);
 
   //notify other tabs
   channel.postMessage(name);
@@ -325,12 +324,10 @@ function achievement_div(achievement) {
   let div = document.createElement("div");
   div.className = "achievement_div";
   let img = document.createElement("img");
-  img.className = "achievement_img"
+  img.className = "achievement_img";
 
-  if (achievement_status[name])
-    img.src = achievement.icon;
-  else
-    img.src = achievement.icongray;
+  if (achievement_status[name]) img.src = achievement.icon;
+  else img.src = achievement.icongray;
 
   let text_div = document.createElement("div");
   text_div.className = "achievement_text";
@@ -342,8 +339,7 @@ function achievement_div(achievement) {
   if (achievement.hidden && !achievement_status[name]) {
     title_element.innerText = "Hidden Achievement";
     img.src = "hidden.png";
-  }
-  else {
+  } else {
     title_element.innerText = achievement.displayName;
     description_element.innerText = achievement.description || "";
   }
@@ -380,12 +376,9 @@ function populate_achievements() {
     let achievement = achievements[name];
     achievement.name = name;
 
-    if (achievement_status[name]) 
-      unlocked.push(achievement);
-    else if (achievement.hidden)
-      hidden.push(achievement);
-    else
-      locked.push(achievement);
+    if (achievement_status[name]) unlocked.push(achievement);
+    else if (achievement.hidden) hidden.push(achievement);
+    else locked.push(achievement);
   }
   locked = locked.concat(hidden);
 
@@ -394,7 +387,7 @@ function populate_achievements() {
 
   unlocked_header.style.display = unlocked.length ? "block" : "none";
   locked_header.style.display = locked.length ? "block" : "none";
-  
+
   populate_grid(unlocked, document.getElementById("unlocked_grid"));
   populate_grid(locked, document.getElementById("locked_grid"));
 }
@@ -408,7 +401,7 @@ function preload_images() {
 }
 
 function index_load() {
-  populate_achievements();  
+  populate_achievements();
   channel.onmessage = () => {
     load_achievements();
     populate_achievements();
@@ -416,7 +409,7 @@ function index_load() {
 }
 
 //disable back/forward cache to reduce memory usage
-window.addEventListener("unload", function(){});
-window.addEventListener("beforeunload", function(){});
+window.addEventListener("unload", function () {});
+window.addEventListener("beforeunload", function () {});
 
 load_achievements();
